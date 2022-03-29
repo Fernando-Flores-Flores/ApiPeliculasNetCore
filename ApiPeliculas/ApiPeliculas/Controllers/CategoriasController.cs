@@ -26,10 +26,19 @@ namespace ApiPeliculas.Controllers
             var listaCategotiasDto = new List<CategoriaDto>();
             foreach (var lista in listaCategorias) {
                 listaCategotiasDto.Add(_mapper.Map<CategoriaDto>(lista));
-            }
-            
-            
+            }            
             return Ok(listaCategotiasDto);
+        }
+
+        [HttpGet("{categoriaId:int}",Name = "GetCategoria")]
+        public IActionResult GetCategoria(int categoriaId ) {
+            var itemCategoria = _ctRepo.GetCategoria(categoriaId);
+            if (itemCategoria == null) {
+                return NotFound();
+            }
+            var itemCategoriaDto=_mapper.Map<CategoriaDto>(itemCategoria);
+            return Ok(itemCategoriaDto);
+
         }
 
 

@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\ApiPeliculas",
+    "\\ApiPeliculas\\ApiPeliculas",
+    "\\ApiPeliculas\\ApiPeliculas\\Controllers",
+    "\\ApiPeliculas\\ApiPeliculas\\Data",
+    "\\ApiPeliculas\\ApiPeliculas\\Data\\Migrations",
+    "\\ApiPeliculas\\ApiPeliculas\\Models",
+    "\\ApiPeliculas\\ApiPeliculas\\Models\\Dtos",
+    "\\ApiPeliculas\\ApiPeliculas\\PeliculasMapper",
+    "\\ApiPeliculas\\ApiPeliculas\\Repository"
+  ],
+  "SelectedNode": "\\ApiPeliculas\\ApiPeliculas.sln",
+  "PreviewInSolutionExplorer": false
+}

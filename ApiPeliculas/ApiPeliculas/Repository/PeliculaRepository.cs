@@ -1,6 +1,7 @@
 ﻿using ApiPeliculas.Data;
 using ApiPeliculas.Models;
 using ApiPeliculas.Repository.IRepository;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApiPeliculas.Repository
 {
@@ -54,22 +55,23 @@ namespace ApiPeliculas.Repository
 
         public Pelicula GetPelicula(int PeliculaId)
         {
-            throw new NotImplementedException();
+            return _bd.Pelicula.FirstOrDefault(c=>c.Id == PeliculaId);
         }
 
         public ICollection<Pelicula> GetPeliculas()
         {
+       return _bd.Pelicula.OrderBy(p => p.Nombre).ToList(); 
             throw new NotImplementedException();
         }
 
-        public ICollection<Pelicula> GetPeliculasEnCategoria(int CarId)
+        public ICollection<Pelicula> GetPeliculasEnCategoria(int CatId)
         {
-            throw new NotImplementedException();
+            return _bd.Pelicula.Include(ca => ca.Categoria).Where(ca => ca.categoriaId == CatId ).ToList();
         }
 
         public bool Guardar()
         {
-            throw new NotImplementedException();
+            return _bd.SaveChanges() >= 0 ? true : false;
         }
     }
 }

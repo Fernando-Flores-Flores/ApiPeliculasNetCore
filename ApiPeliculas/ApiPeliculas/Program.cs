@@ -11,6 +11,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(opciones=>opciones.UseNpgsql
 
 //Comexion al DTO
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+builder.Services.AddScoped<IPeliculaRepository, PeliculaRepository>();
+
 //Añadiendo mapper
 builder.Services.AddAutoMapper(typeof(PeliculasMappers));
 

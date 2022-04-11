@@ -6,7 +6,7 @@ namespace ApiPeliculas.Repository.IRepository
     {
         //Aqui se guardan los metodos del modelo , en este caso Pelicula
         ICollection<Pelicula> GetPeliculas();
-        ICollection<Pelicula> GetPeliculasEnCategoria(int CarId);
+        ICollection<Pelicula> GetPeliculasEnCategoria(int CatId);
 
         Pelicula GetPelicula (int PeliculaId);
 

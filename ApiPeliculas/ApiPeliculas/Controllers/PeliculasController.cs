@@ -52,6 +52,7 @@ namespace ApiPeliculas.Controllers
         [HttpPost]
         public IActionResult CrearPelicula([FromForm] PeliculaCreateDto PeliculaDto)
         {
+            PeliculaDto.RutaImagen = "";
             if (PeliculaDto == null)
             {
                 return BadRequest(ModelState);
@@ -64,6 +65,7 @@ namespace ApiPeliculas.Controllers
             //Subida de archivos
             var archivo = PeliculaDto.Foto;
             string rutaPrincipal = _hostingEnviroment.WebRootPath;
+            Console.WriteLine(rutaPrincipal);
             var archivos = HttpContext.Request.Form.Files;
             if (archivo.Length > 0)
             {
@@ -71,12 +73,12 @@ namespace ApiPeliculas.Controllers
                 var nombreFoto = Guid.NewGuid().ToString();
                 var subidas = Path.Combine(rutaPrincipal, @"fotos");
                 var extension = Path.GetExtension(archivos[0].FileName);
-
+                PeliculaDto.RutaImagen = @"\fotos\" + nombreFoto + extension;
                 using (var fileStreams = new FileStream(Path.Combine(subidas, nombreFoto + extension), FileMode.Create))
                 {
                     archivos[0].CopyTo(fileStreams);
                 }
-                PeliculaDto.RutaImagen = @"\fotos\" + nombreFoto + extension;
+               
             }
             //End subida archivos
             var pelicula = _mapper.Map<Pelicula>(PeliculaDto);
@@ -135,6 +137,44 @@ namespace ApiPeliculas.Controllers
 
         }
 
+
+        [HttpGet("GetPeliculasEnCategoria/{categoriaId:int}")]
+        public IActionResult GetPeliculasEnCategoria(int categoriaId)
+        {
+            var listaPelicula = _pelRepo.GetPeliculasEnCategoria(categoriaId);
+
+            if (listaPelicula == null)
+            {
+                return NotFound();
+            }
+
+            var itemPelicula = new List<PeliculaDto>();
+            foreach (var item in listaPelicula)
+            {
+                itemPelicula.Add(_mapper.Map<PeliculaDto>(item));
+            }
+
+            return Ok(itemPelicula);
+        }
+
+        [HttpGet("Buscar")]
+        public IActionResult Buscar(string nombre)
+        {
+            try
+            {
+                var resultado = _pelRepo.BuscarPelicula(nombre);
+                if (resultado.Any())
+                {
+                    return Ok(resultado);
+                }
+
+                return NotFound();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error recuperando datos de la aplicación");
+            }
+        }
 
     }
 }

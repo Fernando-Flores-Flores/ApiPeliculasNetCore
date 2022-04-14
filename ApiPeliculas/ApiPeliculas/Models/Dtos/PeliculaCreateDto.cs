@@ -5,11 +5,9 @@ namespace ApiPeliculas.Models.Dtos
 {
     public class PeliculaCreateDto
     {
-
         [Required(ErrorMessage = "El nombre es obligatorio")]
         public string Nombre { get; set; }
 
-        [Required(ErrorMessage = "La ruta imagen es obligatorio")]
         public string RutaImagen { get; set; }
 
         public IFormFile Foto { get; set; }
@@ -22,7 +20,5 @@ namespace ApiPeliculas.Models.Dtos
 
         public TipoClasificacion Clasificacion { get; set; }
         public int categoriaId { get; set; }
-
-
     }
 }

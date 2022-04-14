@@ -1,11 +1,19 @@
 {
   "Version": 1,
-  "Hash": "IPCejViWBO/fPRWS+8X6vuqUyByD/v5HFOEgDk5YKDg=",
+  "Hash": "4Zd5T9EyDFVygAji1er6wdrGPMGMKmpWR0M7VBwkK4U=",
   "Source": "ApiPeliculas",
   "BasePath": "_content/ApiPeliculas",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "ApiPeliculas\\wwwroot",
+      "Source": "ApiPeliculas",
+      "ContentRoot": "D:\\VisualStudio\\APIpeliculas\\ApiPeliculas\\ApiPeliculas\\wwwroot\\",
+      "BasePath": "_content/ApiPeliculas",
+      "Pattern": "**"
+    }
+  ],
   "Assets": []
 }

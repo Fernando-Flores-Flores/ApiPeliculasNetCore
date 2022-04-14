@@ -15,78 +15,79 @@ namespace ApiPeliculas.Controllers
     {
         private readonly IPeliculaRepository _pelRepo;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _hostingEnviroment;
 
-        public PeliculasController(IPeliculaRepository pelRepo, IMapper mapper)
+        public PeliculasController(IPeliculaRepository pelRepo, IMapper mapper, IWebHostEnvironment hostingEnviroment)
         {
             _pelRepo = pelRepo;
             _mapper = mapper;
+            _hostingEnviroment = hostingEnviroment;
         }
 
         [HttpGet]
-        public IActionResult GetPeliculas() {
+        public IActionResult GetPeliculas()
+        {
             var listaPeliculas = _pelRepo.GetPeliculas();
             var listaPeliculasDto = new List<PeliculaDto>();
-            foreach (var lista in listaPeliculas) {
+            foreach (var lista in listaPeliculas)
+            {
                 listaPeliculasDto.Add(_mapper.Map<PeliculaDto>(lista));
-            }            
+            }
             return Ok(listaPeliculasDto);
         }
 
-        [HttpGet("{peliculaId:int}",Name = "Getpelicula")]
-        public IActionResult Getpelicula(int peliculaId ) {
+        [HttpGet("{peliculaId:int}", Name = "Getpelicula")]
+        public IActionResult Getpelicula(int peliculaId)
+        {
             var itemPelicula = _pelRepo.GetPelicula(peliculaId);
-            if (itemPelicula == null) {
+            if (itemPelicula == null)
+            {
                 return NotFound();
             }
-            var itemPeliculaDto=_mapper.Map<PeliculaDto>(itemPelicula);
+            var itemPeliculaDto = _mapper.Map<PeliculaDto>(itemPelicula);
             return Ok(itemPeliculaDto);
 
         }
 
-
-
-
-
-
-
-
         [HttpPost]
-        public IActionResult CrearPelicula([FromBody] PeliculaDto peliculaDto) {
-            if (peliculaDto == null) {
+        public IActionResult CrearPelicula([FromForm] PeliculaCreateDto PeliculaDto)
+        {
+            if (PeliculaDto == null)
+            {
                 return BadRequest(ModelState);
             }
-            if (_pelRepo.ExistePelicula(peliculaDto.Nombre)) {
+            if (_pelRepo.ExistePelicula(PeliculaDto.Nombre))
+            {
                 ModelState.AddModelError("", "La película ya existe");
                 return StatusCode(404, ModelState);
             }
             //Subida de archivos
+            var archivo = PeliculaDto.Foto;
+            string rutaPrincipal = _hostingEnviroment.WebRootPath;
+            var archivos = HttpContext.Request.Form.Files;
+            if (archivo.Length > 0)
+            {
+                //Nueva imagen 
+                var nombreFoto = Guid.NewGuid().ToString();
+                var subidas = Path.Combine(rutaPrincipal, @"fotos");
+                var extension = Path.GetExtension(archivos[0].FileName);
 
-
-
-
-
-
-
-
-
-
-
-            //End subida
-
-
-
-
-
-
-
-            var pelicula = _mapper.Map<Pelicula>(peliculaDto);
+                using (var fileStreams = new FileStream(Path.Combine(subidas, nombreFoto + extension), FileMode.Create))
+                {
+                    archivos[0].CopyTo(fileStreams);
+                }
+                PeliculaDto.RutaImagen = @"\fotos\" + nombreFoto + extension;
+            }
+            //End subida archivos
+            var pelicula = _mapper.Map<Pelicula>(PeliculaDto);
             if (!_pelRepo.CrearPelicula(pelicula))
             {
-                ModelState.AddModelError("", $"Algo salio mal guardando el registro {pelicula.Nombre}");
+                ModelState.AddModelError("", $"Algo salio mal guardando el registro{pelicula.Nombre}");
                 return StatusCode(500, ModelState);
             }
-            return CreatedAtRoute("GetPelicula", new { peliculaId = pelicula.Id},pelicula);
+            return CreatedAtRoute("GetPelicula", new { peliculaId = pelicula.Id }, pelicula);
         }
+
 
 
 
@@ -107,7 +108,7 @@ namespace ApiPeliculas.Controllers
             if (!_pelRepo.ActualizarPelicula(pelicula))
             {
                 ModelState.AddModelError("", $"Algo salio mal actualizando el registro {pelicula.Nombre}");
-                return StatusCode(500,ModelState);
+                return StatusCode(500, ModelState);
             }
             return NoContent();
 
@@ -117,11 +118,11 @@ namespace ApiPeliculas.Controllers
         [HttpDelete("{peliculaId:int}", Name = "BorrarPelicula")]
         public IActionResult BorrarPelicula(int peliculaId)
         {
-           // var pelicula = _mapper.Map<Pelicula>(peliculaDto);
+            // var pelicula = _mapper.Map<Pelicula>(peliculaDto);
 
             if (!_pelRepo.ExistePelicula(peliculaId))
             {
-               return NotFound();
+                return NotFound();
             }
             var pelicula = _pelRepo.GetPelicula(peliculaId);
 

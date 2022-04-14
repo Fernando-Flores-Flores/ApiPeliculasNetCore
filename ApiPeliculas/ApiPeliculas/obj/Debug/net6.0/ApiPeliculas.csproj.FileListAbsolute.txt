@@ -37,3 +37,4 @@ D:\VisualStudio\APIpeliculas\ApiPeliculas\ApiPeliculas\bin\Debug\net6.0\Zenit.En
 D:\VisualStudio\APIpeliculas\ApiPeliculas\ApiPeliculas\bin\Debug\net6.0\Zenit.EntityFrameworkCore.Migrations.Postgresql.dll
 D:\VisualStudio\APIpeliculas\ApiPeliculas\ApiPeliculas\bin\Debug\net6.0\AutoMapper.dll
 D:\VisualStudio\APIpeliculas\ApiPeliculas\ApiPeliculas\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+D:\VisualStudio\APIpeliculas\ApiPeliculas\ApiPeliculas\bin\Debug\net6.0\ApiPeliculas.staticwebassets.runtime.json
